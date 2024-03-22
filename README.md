@@ -1,11 +1,11 @@
 # Real IP from Cloudflare Proxy/Tunnel
 
-[![Code Coverage](https://codecov.io/gh/BetterCorp/cloudflarewarp/branch/master/graph/badge.svg?token=QFGZS5QJSG)](https://codecov.io/gh/BetterCorp/cloudflarewarp)
-[![Code Analysis](https://github.com/BetterCorp/cloudflarewarp/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/BetterCorp/cloudflarewarp/actions/workflows/codeql-analysis.yml)
-[![Codacy Security Scan](https://github.com/BetterCorp/cloudflarewarp/actions/workflows/codacy-analysis.yml/badge.svg)](https://github.com/BetterCorp/cloudflarewarp/actions/workflows/codacy-analysis.yml)
-[![Go Report Card](https://goreportcard.com/badge/github.com/BetterCorp/cloudflarewarp)](https://goreportcard.com/report/github.com/BetterCorp/cloudflarewarp)
-[![Build and Test Source](https://github.com/BetterCorp/cloudflarewarp/actions/workflows/buildAndTest.yml/badge.svg)](https://github.com/BetterCorp/cloudflarewarp/actions/workflows/buildAndTest.yml)
-[![Integration Test](https://github.com/BetterCorp/cloudflarewarp/actions/workflows/prodTest.yml/badge.svg)](https://github.com/BetterCorp/cloudflarewarp/actions/workflows/prodTest.yml)
+[![Code Coverage](https://codecov.io/gh/PseudoResonance/cloudflarewarp/branch/master/graph/badge.svg?token=QFGZS5QJSG)](https://codecov.io/gh/PseudoResonance/cloudflarewarp)
+[![Code Analysis](https://github.com/PseudoResonance/cloudflarewarp/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/PseudoResonance/cloudflarewarp/actions/workflows/codeql-analysis.yml)
+[![Codacy Security Scan](https://github.com/PseudoResonance/cloudflarewarp/actions/workflows/codacy-analysis.yml/badge.svg)](https://github.com/PseudoResonance/cloudflarewarp/actions/workflows/codacy-analysis.yml)
+[![Go Report Card](https://goreportcard.com/badge/github.com/PseudoResonance/cloudflarewarp)](https://goreportcard.com/report/github.com/PseudoResonance/cloudflarewarp)
+[![Build and Test Source](https://github.com/PseudoResonance/cloudflarewarp/actions/workflows/buildAndTest.yml/badge.svg)](https://github.com/PseudoResonance/cloudflarewarp/actions/workflows/buildAndTest.yml)
+[![Integration Test](https://github.com/PseudoResonance/cloudflarewarp/actions/workflows/prodTest.yml/badge.svg)](https://github.com/PseudoResonance/cloudflarewarp/actions/workflows/prodTest.yml)
 
 If Traefik is behind a Cloudflare Proxy/Tunnel, it won't be able to get the real IP from the external client as well as other information.
 
@@ -21,8 +21,10 @@ Supported configurations per body
 
 | Setting        | Allowed values | Required | Description                                         |
 | :------------- | :------------- | :------- | :-------------------------------------------------- |
-| trustip        | []string       | No       | IP or IP range to trust                             |
+| trustip        | []string       | No       | IP or IP range to trust in CIDR format              |
 | disableDefault | bool           | Yes      | Disable the built in list of CloudFlare IPs/Servers |
+| trustDnsName   | string         | No       | DNS record to query for trusted IPs                 |
+| clusterCIDR    | []string       | No       | IP ranges to expect trusted IPs                     |
 
 ### Notes re CloudFlare
 
@@ -37,8 +39,8 @@ If you do not define `trustip` and `disableDefault`, it doesn't seem to load the
 experimental:
   plugins:
     cloudflarewarp:
-      modulename: github.com/BetterCorp/cloudflarewarp
-      version: v1.3.0
+      modulename: github.com/PseudoResonance/cloudflarewarp
+      version: v1.4.0
 ```
 
 ### Plugin configuration
@@ -71,7 +73,7 @@ http:
 
 # Testing
 
-[https://github.com/BetterCorp/cloudflarewarp/tree/master/test](https://github.com/BetterCorp/cloudflarewarp/tree/master/test)
+[https://github.com/PseudoResonance/cloudflarewarp/tree/master/test](https://github.com/PseudoResonance/cloudflarewarp/tree/master/test)
 
 We have written the following tests in this repo:
 
