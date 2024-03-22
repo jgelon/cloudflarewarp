@@ -1,4 +1,4 @@
-module github.com/BetterCorp/cloudflarewarp
+module github.com/PseudoResonance/cloudflarewarp
 
 go 1.18
 
