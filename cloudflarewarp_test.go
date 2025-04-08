@@ -185,6 +185,6 @@ func assertHeader(t *testing.T, req *http.Request, key, expected string) {
 	t.Helper()
 
 	if req.Header.Get(key) != expected {
-		t.Errorf("invalid header(%s) value: %s", key, req.Header.Get(key))
+		t.Errorf("invalid header(%s) expected: %s value: %s", key, expected, req.Header.Get(key))
 	}
 }

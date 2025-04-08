@@ -25,6 +25,7 @@ Supported configurations per body
 | disableDefault | bool           | Yes      | Disable the built in list of CloudFlare IPs/Servers |
 | trustDnsName   | string         | No       | DNS record to query for trusted IPs                 |
 | clusterCIDR    | []string       | No       | IP ranges to expect trusted IPs                     |
+| Debug          | bool           | No       | Enables extra debug logging                         |
 
 ### Notes re CloudFlare
 
@@ -40,7 +41,7 @@ experimental:
   plugins:
     cloudflarewarp:
       modulename: github.com/PseudoResonance/cloudflarewarp
-      version: v1.4.0
+      version: v1.4.1
 ```
 
 ### Plugin configuration

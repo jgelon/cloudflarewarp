@@ -4,6 +4,7 @@ package cloudflarewarp
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 	"net"
 	"net/http"
 	"time"
@@ -12,13 +13,13 @@ import (
 )
 
 const (
-	xRealIP        = "X-Real-Ip"
-	xCfTrusted     = "X-Is-Trusted"
-	xForwardFor    = "X-Forwarded-For"
-	xForwardProto  = "X-Forwarded-Proto"
-	cfConnectingIP = "CF-Connecting-IP"
-	cfVisitor      = "CF-Visitor"
-	tickerInterval = 1 * time.Minute
+	xRealIP         = "X-Real-Ip"
+	xIsTrusted      = "X-Is-Trusted"
+	xForwardedFor   = "X-Forwarded-For"
+	xForwardedProto = "X-Forwarded-Proto"
+	cfConnectingIP  = "CF-Connecting-IP"
+	cfVisitor       = "CF-Visitor"
+	tickerInterval  = 1 * time.Minute
 )
 
 // Config the plugin configuration.
@@ -27,6 +28,7 @@ type Config struct {
 	DisableDefaultCFIPs bool     `json:"disableDefault,omitempty"`
 	TrustDNSName        string   `json:"trustDnsName,omitempty"`
 	ClusterCIDR         []string `json:"clusterCIDR,omitempty"`
+	Debug               bool     `json:"debug,omitempty"`
 }
 
 // TrustResult for Trust IP test result.
@@ -44,6 +46,7 @@ func CreateConfig() *Config {
 		DisableDefaultCFIPs: false,
 		TrustDNSName:        "",
 		ClusterCIDR:         []string{},
+		Debug:               false,
 	}
 }
 
@@ -56,6 +59,7 @@ type RealIPOverWriter struct {
 	tickerQuit chan struct{}
 	dnsName    string
 	clusterNet []*net.IPNet
+	Debug      bool
 }
 
 // CFVisitorHeader definition for the header value.
@@ -80,6 +84,8 @@ func New(ctx context.Context, next http.Handler, config *Config, name string) (h
 			ipOverWriter.TrustIP = append(ipOverWriter.TrustIP, trustip)
 		}
 	}
+
+	ipOverWriter.Debug = config.Debug
 
 	if !config.DisableDefaultCFIPs {
 		for _, v := range ips.CFIPs() {
@@ -138,7 +144,9 @@ func (r *RealIPOverWriter) UpdateTrusted(reset bool) {
 }
 
 func (r *RealIPOverWriter) ServeHTTP(rw http.ResponseWriter, req *http.Request) {
-	trustResult := r.trust(req.RemoteAddr, len(req.Header.Get(cfConnectingIP)) > 0)
+	isCfRequest := len(req.Header.Get(cfConnectingIP)) > 0
+	trustResult := r.trust(req.RemoteAddr, isCfRequest)
+	req.Header.Set(xIsTrusted, "no") // Initially assume untrusted
 	if trustResult.isFatal {
 		http.Error(rw, "Unknown source", http.StatusInternalServerError)
 		return
@@ -151,26 +159,38 @@ func (r *RealIPOverWriter) ServeHTTP(rw http.ResponseWriter, req *http.Request) 
 		http.Error(rw, "Unknown source", http.StatusUnprocessableEntity)
 		return
 	}
+	if r.Debug {
+		fmt.Printf("DEBUG: Cloudflarewarp: %v isTrusted:%t isCloudflare:%t", trustResult.directIP, trustResult.trusted, isCfRequest)
+	}
 	if trustResult.trusted {
 		if req.Header.Get(cfVisitor) != "" {
 			var cfVisitorValue CFVisitorHeader
 			if err := json.Unmarshal([]byte(req.Header.Get(cfVisitor)), &cfVisitorValue); err != nil {
-				req.Header.Set(xCfTrusted, "danger")
+				if r.Debug {
+					fmt.Printf("DEBUG: Cloudflarewarp: %v Error while parsing CF-Visitor header", trustResult.directIP)
+				}
+				req.Header.Set(xIsTrusted, "no")
+				req.Header.Set(xRealIP, trustResult.directIP)
+				req.Header.Del(xForwardedFor)
 				req.Header.Del(cfVisitor)
 				req.Header.Del(cfConnectingIP)
 				r.next.ServeHTTP(rw, req)
 				return
 			}
-			req.Header.Set(xForwardProto, cfVisitorValue.Scheme)
+			if r.Debug {
+				fmt.Printf("DEBUG: Cloudflarewarp: %v CF-Visitor Scheme:%v", trustResult.directIP, cfVisitorValue.Scheme)
+			}
+			req.Header.Set(xForwardedProto, cfVisitorValue.Scheme)
 		}
-		if len(req.Header.Get(cfConnectingIP)) > 0 {
-			req.Header.Set(xCfTrusted, "yes")
-			req.Header.Set(xForwardFor, req.Header.Get(cfConnectingIP))
+		if isCfRequest {
+			req.Header.Set(xIsTrusted, "yes")
+			req.Header.Set(xForwardedFor, req.Header.Get(cfConnectingIP))
 			req.Header.Set(xRealIP, req.Header.Get(cfConnectingIP))
 		}
 	} else {
-		req.Header.Set(xCfTrusted, "no")
+		req.Header.Set(xIsTrusted, "no")
 		req.Header.Set(xRealIP, trustResult.directIP)
+		req.Header.Del(xForwardedFor)
 		req.Header.Del(cfVisitor)
 		req.Header.Del(cfConnectingIP)
 	}
