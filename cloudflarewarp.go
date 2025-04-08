@@ -68,7 +68,7 @@ type CFVisitorHeader struct {
 }
 
 // New created a new plugin.
-func New(ctx context.Context, next http.Handler, config *Config, name string) (http.Handler, error) {
+func New(_ context.Context, next http.Handler, config *Config, name string) (http.Handler, error) {
 	ipOverWriter := &RealIPOverWriter{
 		next: next,
 		name: name,
@@ -129,6 +129,7 @@ func New(ctx context.Context, next http.Handler, config *Config, name string) (h
 	return ipOverWriter, nil
 }
 
+// UpdateTrusted Update trusted IPs from DNS.
 func (r *RealIPOverWriter) UpdateTrusted(reset bool) {
 	if reset {
 		r.ticker.Reset(tickerInterval)
