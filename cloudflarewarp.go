@@ -27,7 +27,7 @@ type Config struct {
 	TrustIP             []string `json:"trustip,omitempty"`
 	DisableDefaultCFIPs bool     `json:"disableDefault,omitempty"`
 	TrustDNSName        string   `json:"trustDnsName,omitempty"`
-	ClusterCIDR         []string `json:"clusterCIDR,omitempty"`
+	ClusterCIDR         []string `json:"clusterCidr,omitempty"`
 	Debug               bool     `json:"debug,omitempty"`
 }
 
