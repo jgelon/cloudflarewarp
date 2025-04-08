@@ -41,7 +41,7 @@ experimental:
   plugins:
     cloudflarewarp:
       modulename: github.com/PseudoResonance/cloudflarewarp
-      version: v1.4.1
+      version: v1.4.2
 ```
 
 ### Plugin configuration
