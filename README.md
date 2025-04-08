@@ -24,8 +24,8 @@ Supported configurations per body
 | trustip        | []string       | No       | IP or IP range to trust in CIDR format              |
 | disableDefault | bool           | Yes      | Disable the built in list of CloudFlare IPs/Servers |
 | trustDnsName   | string         | No       | DNS record to query for trusted IPs                 |
-| clusterCIDR    | []string       | No       | IP ranges to expect trusted IPs                     |
-| Debug          | bool           | No       | Enables extra debug logging                         |
+| clusterCidr    | []string       | No       | IP ranges to expect trusted IPs                     |
+| debug          | bool           | No       | Enables extra debug logging                         |
 
 ### Notes re CloudFlare
 
