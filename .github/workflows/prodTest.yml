@@ -2,9 +2,9 @@ name: Test production tag
 
 on:
   workflow_dispatch:
-  push:
-    tags:        
-      - 'v*' 
+  # push:
+  #   tags:        
+  #     - 'v*' 
 
 jobs:
   prodTest:
