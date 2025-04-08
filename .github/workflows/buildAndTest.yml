@@ -52,9 +52,8 @@ jobs:
       - name: Format code
         run: gofmt -l -d ./ips/* ; gofmt -l -d ./*.go
 
-      # Temporarily disable
-      # - name: Lint Code
-      #   run: ${{ github.workspace }}/go/bin/golangci-lint run
+      - name: Lint Code
+        run: ${{ github.workspace }}/go/bin/golangci-lint run
 
       - name: Test Code
         run: go test -race -coverprofile=coverage.txt -covermode=atomic ./*_test.go
