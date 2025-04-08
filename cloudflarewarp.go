@@ -160,25 +160,25 @@ func (r *RealIPOverWriter) ServeHTTP(rw http.ResponseWriter, req *http.Request) 
 		http.Error(rw, "Unknown source", http.StatusUnprocessableEntity)
 		return
 	}
-	debugIp := trustResult.directIP
+	debugIP := trustResult.directIP
 	if r.Debug {
 		if isCfRequest {
-			debugIp = req.Header.Get(cfConnectingIP)
+			debugIP = req.Header.Get(cfConnectingIP)
 		} else if trustResult.trusted {
 			if len(req.Header.Get(xRealIP)) > 0 {
-				debugIp = req.Header.Get(xRealIP)
+				debugIP = req.Header.Get(xRealIP)
 			} else if len(req.Header.Get(xForwardedFor)) > 0 {
-				debugIp = req.Header.Get(xForwardedFor)
+				debugIP = req.Header.Get(xForwardedFor)
 			}
 		}
-		fmt.Printf("DEBUG: Cloudflarewarp: %v isTrusted:%t isCloudflare:%t", debugIp, trustResult.trusted, isCfRequest)
+		fmt.Printf("DEBUG: Cloudflarewarp: %v isTrusted:%t isCloudflare:%t", debugIP, trustResult.trusted, isCfRequest)
 	}
 	if trustResult.trusted {
 		if req.Header.Get(cfVisitor) != "" {
 			var cfVisitorValue CFVisitorHeader
 			if err := json.Unmarshal([]byte(req.Header.Get(cfVisitor)), &cfVisitorValue); err != nil {
 				if r.Debug {
-					fmt.Printf("DEBUG: Cloudflarewarp: %v Error while parsing CF-Visitor header", debugIp)
+					fmt.Printf("DEBUG: Cloudflarewarp: %v Error while parsing CF-Visitor header", debugIP)
 				}
 				req.Header.Set(xIsTrusted, "no")
 				req.Header.Set(xRealIP, trustResult.directIP)
@@ -189,7 +189,7 @@ func (r *RealIPOverWriter) ServeHTTP(rw http.ResponseWriter, req *http.Request) 
 				return
 			}
 			if r.Debug {
-				fmt.Printf("DEBUG: Cloudflarewarp: %v CF-Visitor Scheme:%v", debugIp, cfVisitorValue.Scheme)
+				fmt.Printf("DEBUG: Cloudflarewarp: %v CF-Visitor Scheme:%v", debugIP, cfVisitorValue.Scheme)
 			}
 			req.Header.Set(xForwardedProto, cfVisitorValue.Scheme)
 		}
