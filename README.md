@@ -1,5 +1,9 @@
 # Real IP from Cloudflare Proxy/Tunnel
 
+Forked from https://github.com/BetterCorp/cloudflarewarp
+
+Traefik plugin repositories cannot be GitHub forks to show up on the plugin repository, which is why this repo no longer shows as a fork.
+
 [![Code Coverage](https://codecov.io/gh/PseudoResonance/cloudflarewarp/branch/master/graph/badge.svg?token=QFGZS5QJSG)](https://codecov.io/gh/PseudoResonance/cloudflarewarp)
 [![Code Analysis](https://github.com/PseudoResonance/cloudflarewarp/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/PseudoResonance/cloudflarewarp/actions/workflows/codeql-analysis.yml)
 [![Codacy Security Scan](https://github.com/PseudoResonance/cloudflarewarp/actions/workflows/codacy-analysis.yml/badge.svg)](https://github.com/PseudoResonance/cloudflarewarp/actions/workflows/codacy-analysis.yml)
