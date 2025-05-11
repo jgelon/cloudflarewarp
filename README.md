@@ -1,9 +1,4 @@
 # Real IP from Cloudflare Proxy/Tunnel
-
-Forked from https://github.com/BetterCorp/cloudflarewarp
-
-Traefik plugin repositories cannot be GitHub forks to show up on the plugin repository, which is why this repo no longer shows as a fork.
-
 [![Code Coverage](https://codecov.io/gh/PseudoResonance/cloudflarewarp/branch/master/graph/badge.svg?token=QFGZS5QJSG)](https://codecov.io/gh/PseudoResonance/cloudflarewarp)
 [![Code Analysis](https://github.com/PseudoResonance/cloudflarewarp/actions/workflows/codeqlAnalysis.yml/badge.svg)](https://github.com/PseudoResonance/cloudflarewarp/actions/workflows/codeqlAnalysis.yml)
 [![Codacy Security Scan](https://github.com/PseudoResonance/cloudflarewarp/actions/workflows/codacyAnalysis.yml/badge.svg)](https://github.com/PseudoResonance/cloudflarewarp/actions/workflows/codacyAnalysis.yml)
@@ -11,6 +6,9 @@ Traefik plugin repositories cannot be GitHub forks to show up on the plugin repo
 [![Build and Test Source](https://github.com/PseudoResonance/cloudflarewarp/actions/workflows/buildAndTest.yml/badge.svg)](https://github.com/PseudoResonance/cloudflarewarp/actions/workflows/buildAndTest.yml)
 [![Static Analysis](https://github.com/PseudoResonance/cloudflarewarp/actions/workflows/staticAnalysis.yml/badge.svg)](https://github.com/PseudoResonance/cloudflarewarp/actions/workflows/staticAnalysis.yml)
 [![Integration Test](https://github.com/PseudoResonance/cloudflarewarp/actions/workflows/prodTest.yml/badge.svg)](https://github.com/PseudoResonance/cloudflarewarp/actions/workflows/prodTest.yml)
+
+Forked from https://github.com/BetterCorp/cloudflarewarp
+> Note: Traefik plugin repositories cannot be GitHub forks to show up on the plugin repository, which is why this repo no longer shows as a fork.
 
 If Traefik is behind a Cloudflare Proxy/Tunnel, it won't be able to get the real IP from the external client as well as other information.
 
