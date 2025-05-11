@@ -5,9 +5,25 @@ on:
   push:
     branches:
     - "*"
+    paths-ignore:
+    - '.gitattributes'
+    - '.gitignore'
+    - 'LICENSE'
+    - 'README.md'
+    - '.vscode/**'
+    - '.devcontainer/**'
+    - '.assets/**'
   pull_request_target:
     branches:
     - "*"
+    paths-ignore:
+    - '.gitattributes'
+    - '.gitignore'
+    - 'LICENSE'
+    - 'README.md'
+    - '.vscode/**'
+    - '.devcontainer/**'
+    - '.assets/**'
 
 permissions:
   checks: write
