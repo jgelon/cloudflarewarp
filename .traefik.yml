@@ -3,9 +3,9 @@ type: middleware
 import: github.com/PseudoResonance/cloudflarewarp
 iconPath: .assets/icon.png
 
-summary: get real IP and proto from Cloudflare Proxy/Tunnel
+summary: Get real IP and protocol from Cloudflare Proxy/Tunnel headers
 
 testData:
   disableDefault: false
   trustip:
-    - 2400:cb00::/32
+  - 2400:cb00::/32

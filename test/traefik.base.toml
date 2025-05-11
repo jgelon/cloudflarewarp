@@ -15,7 +15,7 @@
 
 [traefikLog]
   filePath = "/var/logs/traefik/traefik.log"
-  format   = "json"
+  format = "json"
 
 [log]
   level = "DEBUG"
@@ -27,7 +27,9 @@
   bufferingSize = 0
   format = "json"
   [accessLog.filters]
-    statusCodes = ["100-800"]
+    statusCodes = [
+      "100-800",
+    ]
     retryAttempts = true
     minDuration = "0ms"
 
@@ -35,11 +37,5 @@
     defaultMode = "keep"
 
 [providers.file]
-  directory="/etc/traefik/mconfig/"
-  watch="true"
-
-[experimental]
-  [experimental.plugins]
-    [experimental.plugins.cloudflarewarp]
-      moduleName = "github.com/PseudoResonance/cloudflarewarp"
-      version = "v1.4.0"
+  directory = "/etc/traefik/mconfig/"
+  watch = "true"

@@ -1,8 +1,14 @@
 {
-    "cSpell.words": [
-        "cloudflaretunnel",
-        "cloudflarewarp",
-        "cloudflareip",
-        "trustip"
-    ]
+	"files.eol": "\n",
+	"files.insertFinalNewline": true,
+	"files.trimFinalNewlines": true,
+	"editor.formatOnSave": true,
+	"evenBetterToml.formatter.allowedBlankLines": 1,
+	"evenBetterToml.formatter.arrayTrailingComma": true,
+	"evenBetterToml.formatter.arrayAutoExpand": true,
+	"evenBetterToml.formatter.arrayAutoCollapse": false,
+	"evenBetterToml.formatter.indentEntries": true,
+	"evenBetterToml.formatter.indentString": "  ",
+	"evenBetterToml.formatter.indentTables": true,
+	"evenBetterToml.formatter.columnWidth": 0
 }

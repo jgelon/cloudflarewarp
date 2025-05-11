@@ -1,15 +1,11 @@
 run:
   timeout: 3m
-  skip-files: []
-  skip-dirs: []
 
 linters-settings:
   govet:
     enable-all: true
     disable:
-      - fieldalignment
-  golint:
-    min-confidence: 0
+    - fieldalignment
   gocyclo:
     min-complexity: 12
   goconst:
@@ -22,53 +18,51 @@ linters-settings:
     statements: 50
   godox:
     keywords:
-      - FIXME
+    - FIXME
   gofumpt:
     extra-rules: true
+  depguard:
+    rules:
+      main:
+        files:
+        - $all
+        - "!$test"
+        allow:
+        - $gostd
+        - github.com/PseudoResonance/cloudflarewarp
 
 linters:
   enable-all: true
   disable:
-    - deadcode # deprecated
-    - varcheck # deprecated
-    - structcheck # deprecated
-    - nosnakecase # deprecated
-    - interfacer # deprecated
-    - maligned # deprecated
-    - scopelint # deprecated
-    - golint # deprecated
-    - exhaustivestruct # deprecated
-    - cyclop # duplicate of gocyclo
-    - bodyclose # Too many false positives: https://github.com/timakin/bodyclose/issues/30
-    - dupl
-    - testpackage
-    - tparallel
-    - paralleltest
-    - nlreturn
-    - wsl
-    - exhaustive
-    - exhaustruct
-    - goerr113
-    - wrapcheck
-    - ifshort
-    - noctx
-    - lll
-    - gomnd
-    - forbidigo
-    - varnamelen
-    - gocyclo
-    - nestif
+  - cyclop # duplicate of gocyclo
+  - bodyclose # Too many false positives: https://github.com/timakin/bodyclose/issues/30
+  - dupl
+  - testpackage
+  - tparallel
+  - paralleltest
+  - nlreturn
+  - wsl
+  - exhaustive
+  - exhaustruct
+  - err113
+  - wrapcheck
+  - noctx
+  - lll
+  - gomnd
+  - forbidigo
+  - varnamelen
+  - gocyclo
+  - nestif
 
 issues:
   exclude-use-default: false
-  max-per-linter: 0
   max-same-issues: 0
   exclude:
-    - ST1000
-    - EXC0011 # https://github.com/golangci/golangci-lint/issues/980
+  - ST1000
+  - EXC0011 # https://github.com/golangci/golangci-lint/issues/980
   exclude-rules:
-    - path: (.+)_test.go
-      linters:
-        - goconst
-        - funlen
-        - godot
+  - path: (.+)_test.go
+    linters:
+    - goconst
+    - funlen
+    - godot

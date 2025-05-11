@@ -138,14 +138,14 @@ func (r *RealIPOverWriter) UpdateTrusted(reset bool) {
 	TrustIPNew := []*net.IPNet{}
 	if err == nil {
 		for _, ip := range iprecords {
-			TrustIPNew = append(TrustIPNew, &net.IPNet{IP: ip, Mask: net.CIDRMask(128, 128)})
+			TrustIPNew = append(TrustIPNew, &net.IPNet{IP: ip, Mask: net.CIDRMask(128, 128)}) //nolint:mnd
 		}
 	}
 	r.TrustIP = TrustIPNew
 }
 
 func (r *RealIPOverWriter) ServeHTTP(rw http.ResponseWriter, req *http.Request) {
-	isCfRequest := len(req.Header.Get(cfConnectingIP)) > 0
+	isCfRequest := len(req.Header.Get(cfConnectingIP)) > 0 //nolint:canonicalheader
 	trustResult := r.trust(req.RemoteAddr, isCfRequest)
 	req.Header.Set(xIsTrusted, "no") // Initially assume untrusted
 	if trustResult.isFatal {
@@ -163,7 +163,7 @@ func (r *RealIPOverWriter) ServeHTTP(rw http.ResponseWriter, req *http.Request) 
 	debugIP := trustResult.directIP
 	if r.Debug {
 		if isCfRequest {
-			debugIP = req.Header.Get(cfConnectingIP)
+			debugIP = req.Header.Get(cfConnectingIP) //nolint:canonicalheader
 		} else if trustResult.trusted {
 			if len(req.Header.Get(xRealIP)) > 0 {
 				debugIP = req.Header.Get(xRealIP)
@@ -174,17 +174,17 @@ func (r *RealIPOverWriter) ServeHTTP(rw http.ResponseWriter, req *http.Request) 
 		fmt.Printf("DEBUG: Cloudflarewarp: %v isTrusted:%t isCloudflare:%t", debugIP, trustResult.trusted, isCfRequest)
 	}
 	if trustResult.trusted {
-		if req.Header.Get(cfVisitor) != "" {
+		if req.Header.Get(cfVisitor) != "" { //nolint:canonicalheader
 			var cfVisitorValue CFVisitorHeader
-			if err := json.Unmarshal([]byte(req.Header.Get(cfVisitor)), &cfVisitorValue); err != nil {
+			if err := json.Unmarshal([]byte(req.Header.Get(cfVisitor)), &cfVisitorValue); err != nil { //nolint:canonicalheader
 				if r.Debug {
 					fmt.Printf("DEBUG: Cloudflarewarp: %v Error while parsing CF-Visitor header", debugIP)
 				}
 				req.Header.Set(xIsTrusted, "no")
 				req.Header.Set(xRealIP, trustResult.directIP)
 				req.Header.Del(xForwardedFor)
-				req.Header.Del(cfVisitor)
-				req.Header.Del(cfConnectingIP)
+				req.Header.Del(cfVisitor)      //nolint:canonicalheader
+				req.Header.Del(cfConnectingIP) //nolint:canonicalheader
 				r.next.ServeHTTP(rw, req)
 				return
 			}
@@ -195,15 +195,15 @@ func (r *RealIPOverWriter) ServeHTTP(rw http.ResponseWriter, req *http.Request) 
 		}
 		if isCfRequest {
 			req.Header.Set(xIsTrusted, "yes")
-			req.Header.Set(xForwardedFor, req.Header.Get(cfConnectingIP))
-			req.Header.Set(xRealIP, req.Header.Get(cfConnectingIP))
+			req.Header.Set(xForwardedFor, req.Header.Get(cfConnectingIP)) //nolint:canonicalheader
+			req.Header.Set(xRealIP, req.Header.Get(cfConnectingIP))       //nolint:canonicalheader
 		}
 	} else {
 		req.Header.Set(xIsTrusted, "no")
 		req.Header.Set(xRealIP, trustResult.directIP)
 		req.Header.Del(xForwardedFor)
-		req.Header.Del(cfVisitor)
-		req.Header.Del(cfConnectingIP)
+		req.Header.Del(cfVisitor)      //nolint:canonicalheader
+		req.Header.Del(cfConnectingIP) //nolint:canonicalheader
 	}
 	r.next.ServeHTTP(rw, req)
 }

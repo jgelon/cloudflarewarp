@@ -14,7 +14,7 @@ Traefik plugin repositories cannot be GitHub forks to show up on the plugin repo
 If Traefik is behind a Cloudflare Proxy/Tunnel, it won't be able to get the real IP from the external client as well as other information.
 
 This plugin solves this issue by overwriting the X-Real-IP and X-Forwarded-For with an IP from the CF-Connecting-IP header.  
-The real IP will be the Cf-Connecting-IP if request is come from cloudflare ( truest ip in configuration file).  
+The real IP will be the Cf-Connecting-IP if request is come from Cloudflare ( truest ip in configuration file).  
 The plugin also writes the CF-Visitor scheme to the X-Forwarded-Proto. (This fixes an infinite redirect issue for wordpress when using CF[443]->PROXY/TUNNEL->Traefik[80]->WP[80])
 
 ## Configuration
@@ -26,14 +26,14 @@ Supported configurations per body
 | Setting        | Allowed values | Required | Description                                         |
 | :------------- | :------------- | :------- | :-------------------------------------------------- |
 | trustip        | []string       | No       | IP or IP range to trust in CIDR format              |
-| disableDefault | bool           | Yes      | Disable the built in list of CloudFlare IPs/Servers |
+| disableDefault | bool           | Yes      | Disable the built in list of Cloudflare IPs/Servers |
 | trustDnsName   | string         | No       | DNS record to query for trusted IPs                 |
 | clusterCidr    | []string       | No       | IP ranges to expect trusted IPs                     |
 | debug          | bool           | No       | Enables extra debug logging                         |
 
-### Notes re CloudFlare
+### Notes re Cloudflare
 
-One thing included in this plugin is we bundle the CloudFlare server IPs with it, so you do not have to define them manually.  
+One thing included in this plugin is we bundle the Cloudflare server IPs with it, so you do not have to define them manually.  
 However on the flip-side, if you want to, you can just disable them by setting `disableDefault` to `true`.
 
 If you do not define `trustip` and `disableDefault`, it doesn't seem to load the plugin, so just set `disableDefault` to `false` and you are able to use the default IP list.
@@ -57,7 +57,7 @@ http:
       plugin:
         cloudflarewarp:
           disableDefault: false
-          trustip: # Trust IPS not required if disableDefault is false - we will allocate Cloud Flare IPs automatically
+          trustip: # Trust IPS not required if disableDefault is false - we will add Cloudflare IPs automatically
             - "2400:cb00::/32"
 
   routers:

@@ -3,9 +3,10 @@ networks:
     internal: true
   default:
 
+
 services:
   whoami:
-    image: traefik/whoami:latest
+    image: traefik/whoami:${TRAEFIK_WHOAMI_VERSION:-latest}
     depends_on:
       - traefik
     networks:
@@ -25,16 +26,15 @@ services:
       - "traefik.enable=true"
 
   traefik:
-    image: traefik:latest
+    image: traefik:${TRAEFIK_VERSION:-latest}
     networks:
       - proxy
       - default
     ports:
       - 4008:80
     volumes:
-      - ./traefik-compose.toml:/etc/traefik/traefik.toml
-      - ./logs:/var/logs/traefik
-      - ./tempconfig:/etc/traefik/mconfig
-      - ../:/plugins-local/src/github.com/PseudoResonance/cloudflarewarp:ro
-      - /var/run/docker.sock:/var/run/docker.sock:ro
       - /etc/localtime:/etc/localtime:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ./traefik.toml:/etc/traefik/traefik.toml
+      - ./logs:/var/logs/traefik
+      - ./config:/etc/traefik/mconfig

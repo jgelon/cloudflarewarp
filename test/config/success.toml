@@ -4,9 +4,8 @@
     [http.middlewares.cloudflarewarp]
       [http.middlewares.cloudflarewarp.plugin]
         [http.middlewares.cloudflarewarp.plugin.cloudflarewarp]
-          trustip=[
-            "10.0.0.0/8", 
+          trustip = [
+            "10.0.0.0/8",
             "172.0.0.0/8",
-            "192.0.0.0/8"
+            "192.0.0.0/8",
           ]
-          
