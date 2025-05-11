@@ -9,6 +9,7 @@ Traefik plugin repositories cannot be GitHub forks to show up on the plugin repo
 [![Codacy Security Scan](https://github.com/PseudoResonance/cloudflarewarp/actions/workflows/codacyAnalysis.yml/badge.svg)](https://github.com/PseudoResonance/cloudflarewarp/actions/workflows/codacyAnalysis.yml)
 [![Go Report Card](https://goreportcard.com/badge/github.com/PseudoResonance/cloudflarewarp)](https://goreportcard.com/report/github.com/PseudoResonance/cloudflarewarp)
 [![Build and Test Source](https://github.com/PseudoResonance/cloudflarewarp/actions/workflows/buildAndTest.yml/badge.svg)](https://github.com/PseudoResonance/cloudflarewarp/actions/workflows/buildAndTest.yml)
+[![Static Analysis](https://github.com/PseudoResonance/cloudflarewarp/actions/workflows/staticAnalysis.yml/badge.svg)](https://github.com/PseudoResonance/cloudflarewarp/actions/workflows/staticAnalysis.yml)
 [![Integration Test](https://github.com/PseudoResonance/cloudflarewarp/actions/workflows/prodTest.yml/badge.svg)](https://github.com/PseudoResonance/cloudflarewarp/actions/workflows/prodTest.yml)
 
 If Traefik is behind a Cloudflare Proxy/Tunnel, it won't be able to get the real IP from the external client as well as other information.
