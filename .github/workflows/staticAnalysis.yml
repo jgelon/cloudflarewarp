@@ -78,6 +78,18 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+
+    - name: Set up Go
+      uses: actions/setup-go@v5
+      with:
+        go-version-file: 'go.mod'
+
+    - name: Test Code
+      run: go test -race -coverprofile=coverage.txt -covermode=atomic ./*_test.go
+      env:
+        CGO_ENABLED: 1
 
     - name: Upload coverage reports to Codecov
       uses: codecov/codecov-action@v5
