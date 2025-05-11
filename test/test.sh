@@ -5,7 +5,7 @@ cd "$(dirname "$0")"
 cleanup() {
 	echo "Cleaning up..."
 	# Call test base cleanup as well
-	sh test.base.sh CLEANUP
+	"$SHELL" test.base.sh CLEANUP
 	exit $1
 }
 
