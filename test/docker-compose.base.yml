@@ -2,7 +2,10 @@ networks:
   proxy:
     internal: true
   default:
-
+    ipam:
+      config:
+        - subnet: 172.19.0.0/24
+          gateway: 172.19.0.10
 
 services:
   whoami:

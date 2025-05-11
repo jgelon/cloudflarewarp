@@ -2,6 +2,15 @@
 
 cd "$(dirname "$0")"
 
+cleanup() {
+	echo "Cleaning up..."
+	# Call test base cleanup as well
+	sh test.base.sh CLEANUP
+	exit $1
+}
+
+trap "cleanup 1" SIGINT SIGTERM SIGHUP
+
 [ -d "output" ] && rm -r "output"
 mkdir output
 mkdir -p run
@@ -24,8 +33,8 @@ DOCKER_COMPOSE_BASE="./docker-compose.base.yml"
 echo "Using Traefik whoami ${TRAEFIK_WHOAMI_VERSION}"
 echo "Using Traefik ${TRAEFIK_VERSION}"
 
-# docker pull traefik/whoami:${TRAEFIK_WHOAMI_VERSION}>/dev/null
-# docker pull traefik:${TRAEFIK_VERSION}>/dev/null
+docker pull traefik/whoami:${TRAEFIK_WHOAMI_VERSION}>/dev/null
+docker pull traefik:${TRAEFIK_VERSION}>/dev/null
 
 cp $TRAEFIK_CONFIG_BASE $TRAEFIK_CONFIG
 cp $DOCKER_COMPOSE_BASE $DOCKER_COMPOSE
@@ -51,59 +60,46 @@ else
 	  moduleName = "${MODULE_NAME}"
 	EOF
 
+	# Provide local code to container
 	cat >> $DOCKER_COMPOSE <<-EOF
       - ../../:/plugins-local/src/${MODULE_NAME}:ro
 	EOF
 fi
 
 checkExit() {
+	# Validate if exit code is fail, and cleanup/exit if so
 	if [ ! $1 = 0 ]; then
 		echo "Test fail"
-		sh test.base.sh CLEANUP
-		exit 1
+		cleanup 1
 	fi
 }
 
-"$SHELL" test.base.sh success toml $TEST_IP
-checkExit $?
-"$SHELL" test.verify.sh success $TEST_IP
-EXIT=$?
-mv run/logs output/success-toml
-checkExit $EXIT
+runTest() {
+	# Run test with same shell executable
+	"$SHELL" test.base.sh $1 $2 $3
+	# Check if it exited safely, and if not, cleanup
+	checkExit $?
+	# Validate test results
+	"$SHELL" test.verify.sh $1 $3
+	# Save exit code for later
+	EXIT=$?
+	# Move logs for packaging by CI
+	mv run/logs output/$1-$2
+	# Check if validate exited safely, and if not, cleanup
+	checkExit $EXIT
+}
 
-"$SHELL" test.base.sh fail toml $TEST_IP
-checkExit $?
-"$SHELL" test.verify.sh fail $TEST_IP
-EXIT=$?
-mv run/logs output/fail-toml
-checkExit $EXIT
+# TOML config tests
+runTest success toml $TEST_IP
+runTest fail toml $TEST_IP
+runTest invalid toml "1522.20.1"
 
-"$SHELL" test.base.sh invalid toml "1522.20.2"
-checkExit $?
-"$SHELL" test.verify.sh invalid "1522.20.2"
-EXIT=$?
-mv run/logs output/invalid-toml
-checkExit $EXIT
+# YAML config tests
+runTest success yml $TEST_IP
+runTest fail yml $TEST_IP
+runTest invalid yml "1522.20.2"
 
-"$SHELL" test.base.sh success yml $TEST_IP
-checkExit $?
-"$SHELL" test.verify.sh success $TEST_IP
-EXIT=$?
-mv run/logs output/success-yml
-checkExit $EXIT
+echo All tests succeeded!
 
-"$SHELL" test.base.sh fail yml $TEST_IP
-checkExit $?
-"$SHELL" test.verify.sh fail $TEST_IP
-EXIT=$?
-mv run/logs output/fail-yml
-checkExit $EXIT
-
-"$SHELL" test.base.sh invalid yml "1522.20.2"
-checkExit $?
-"$SHELL" test.verify.sh invalid "1522.20.2"
-EXIT=$?
-mv run/logs output/invalid-yml
-checkExit $EXIT
-
-"$SHELL" test.base.sh CLEANUP
+# Cleanup as success
+cleanup 0
