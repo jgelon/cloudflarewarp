@@ -2,7 +2,7 @@ WORK_PATH="./run"
 
 cleanup() {
 	echo "Cleaning up..."
-	docker compose -f "${WORK_PATH}/docker-compose.yml" stop;
+	docker compose -f "${WORK_PATH}/docker-compose.yml" stop traefik;
 	exit $1
 }
 
