@@ -56,7 +56,11 @@ for file in $FILES_TO_UPDATE; do
 	sed -i "s/$LATEST_PLUGIN_VERSION/$NEW_VERSION/g" $file
 done
 
-git add -A
-git commit -m "[Release $NEW_VERSION] Bump version from $LATEST_PLUGIN_VERSION\n$UPDATE_DESCRIPTION"
-git tag -a $NEW_VERSION -m "$UPDATE_DESCRIPTION"
-git push
+if [ ${ENVIRONMENT:=default} = "ci" ]; then
+	git add -A
+	git commit -m "[Release $NEW_VERSION] Bump version from $LATEST_PLUGIN_VERSION\n$UPDATE_DESCRIPTION"
+	git tag -a $NEW_VERSION -m "$UPDATE_DESCRIPTION"
+	git push
+else
+	echo "Skipping commit/tag as ENVIRONMENT is not set to ci"
+fi
