@@ -6,7 +6,7 @@ on:
       versionType:
         description: 'Version Type'
         required: true
-        default: 'minor'
+        default: 'patch'
         type: choice
         options:
         - major
@@ -42,6 +42,5 @@ jobs:
       run: |
         LATEST_TAG=$(git describe --match "v*" --abbrev=0 --tags HEAD)
         gh release create "$LATEST_TAG" \
-            --repo="$GITHUB_REPOSITORY" \
             --title="$LATEST_TAG" \
             --generate-notes
