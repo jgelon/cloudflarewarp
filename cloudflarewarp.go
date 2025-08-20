@@ -17,7 +17,7 @@ const (
 	xIsTrusted      = "X-Is-Trusted"
 	xForwardedFor   = "X-Forwarded-For"
 	xForwardedProto = "X-Forwarded-Proto"
-	cfConnectingIP  = "CF-Connecting-IP"
+	cfConnectingIP  = "CF-Connecting-Ip"
 	cfVisitor       = "CF-Visitor"
 	tickerInterval  = 1 * time.Minute
 )
